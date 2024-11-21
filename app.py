@@ -74,10 +74,6 @@ unique_project_df = pd.DataFrame({
 
 visualization_df = pd.concat([overlap_df, unique_program_df, unique_project_df])
 
-# Set Mapbox Access Token
-mapbox_token = "pk.eyJ1Ijoiamxia212ZSIsImEiOiJjbTM0Mjgyemwxam52MmtzajJ0ajF3azI1In0.8CNbktJSB7gNl35DfoHXNw"
-px.set_mapbox_access_token(mapbox_token)
-
 # Visualize using an interactive Mapbox map
 fig = px.choropleth_mapbox(
     data_frame=visualization_df,
