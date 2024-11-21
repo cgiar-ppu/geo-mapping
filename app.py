@@ -91,6 +91,7 @@ fig = px.choropleth_mapbox(
     zoom=1,
     center={"lat": 20, "lon": 0},
     opacity=0.5,
+    height=600,  # Increase height of the map container by 2X
     title='Country Overlap between Selected Programs and Projects'
 )
 
