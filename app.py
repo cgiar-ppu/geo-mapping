@@ -1,7 +1,9 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import pycountry
+import plotly.io as pio
+import json
+import requests
 
 # Set page configuration
 st.set_page_config(layout="wide")
@@ -11,13 +13,23 @@ st.sidebar.header("Settings")
 # Add any settings you need here
 
 # Load data
-@st.cache
+@st.cache_data
 def load_data():
     priority_df = pd.read_excel("Priority Countries.xlsx")
     countries_map_df = pd.read_excel("CountriesMap.xlsx")
     return priority_df, countries_map_df
 
 priority_df, countries_map_df = load_data()
+
+# Load geojson for countries
+@st.cache_data
+def load_geojson():
+    url = 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json'
+    response = requests.get(url)
+    geojson = response.json()
+    return geojson
+
+geojson = load_geojson()
 
 # Left Column: Programs
 st.markdown("## Program Selection")
@@ -62,20 +74,16 @@ unique_project_df = pd.DataFrame({
 
 visualization_df = pd.concat([overlap_df, unique_program_df, unique_project_df])
 
-# Map country names to ISO-3 codes
-def get_iso3_code(country_name):
-    try:
-        return pycountry.countries.lookup(country_name).alpha_3
-    except LookupError:
-        return None
+# Set Mapbox Access Token
+mapbox_token = "pk.eyJ1Ijoiamxia212ZSIsImEiOiJjbTM0Mjgyemwxam52MmtzajJ0ajF3azI1In0.8CNbktJSB7gNl35DfoHXNw"
+px.set_mapbox_access_token(mapbox_token)
 
-visualization_df['iso_alpha'] = visualization_df['Country'].apply(get_iso3_code)
-visualization_df = visualization_df.dropna(subset=['iso_alpha'])  # Remove countries not found
-
-# Visualize using an interactive mapbox map
-fig = px.choropleth(
-    visualization_df,
-    locations='iso_alpha',
+# Visualize using an interactive Mapbox map
+fig = px.choropleth_mapbox(
+    data_frame=visualization_df,
+    geojson=geojson,
+    locations='Country',
+    featureidkey='properties.name',
     color='Status',
     hover_name='Country',
     color_discrete_map={
@@ -83,7 +91,10 @@ fig = px.choropleth(
         'Only in Programs': 'blue',
         'Only in Projects': 'red'
     },
-    projection='natural earth',
+    mapbox_style='carto-positron',
+    zoom=1,
+    center={"lat": 20, "lon": 0},
+    opacity=0.5,
     title='Country Overlap between Selected Programs and Projects'
 )
 
