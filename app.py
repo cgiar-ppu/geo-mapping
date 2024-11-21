@@ -120,7 +120,7 @@ with col4:
 # Provide Data Table and Download Option at the Bottom
 st.markdown("## Data Table")
 
-st.dataframe(visualization_df)
+st.dataframe(visualization_df, width=400)
 
 @st.cache_data
 def convert_df(df):
@@ -139,13 +139,13 @@ st.download_button(
 st.markdown("## Selected Programs and Associated Countries")
 
 if not program_countries.empty:
-    st.dataframe(program_countries[['Program', 'Country']].drop_duplicates())
+    st.dataframe(program_countries[['Program', 'Country']].drop_duplicates(), width=600)
 else:
     st.write("No programs selected.")
 
 st.markdown("## Selected Projects and Associated Countries")
 
 if not project_countries.empty:
-    st.dataframe(project_countries[['Project Name', 'Country']].drop_duplicates())
+    st.dataframe(project_countries[['Project Name', 'Country']].drop_duplicates(), width=600)
 else:
     st.write("No projects selected.")
