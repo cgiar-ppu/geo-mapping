@@ -24,10 +24,10 @@ priority_df, countries_map_df = load_data()
 # Load geojson for countries
 @st.cache_data
 def load_geojson():
-    url = 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json'
-    response = requests.get(url)
-    geojson = response.json()
+    with open("geojson.json") as f:
+        geojson = json.load(f)
     return geojson
+
 
 geojson = load_geojson()
 
