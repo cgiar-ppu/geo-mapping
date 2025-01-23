@@ -6,9 +6,6 @@ import json
 # Set page configuration
 st.set_page_config(layout="wide")
 
-# Sidebar settings
-st.sidebar.header("Settings")
-
 # Load data
 @st.cache_data
 def load_data():
@@ -76,68 +73,101 @@ overlap_count = 0
 # Check the number of selected filters and calculate overlap accordingly
 if len(selected_programs) > 0 and len(selected_centers) > 0 and len(selected_funders) > 0 and len(selected_projects) > 0:
     overlap_countries = set(program_countries) & set(center_countries) & set(funder_countries) & set(project_countries)
-    overlap_percentage = calculate_overlap_percentage(overlap_countries, len(set(program_countries) | set(center_countries) | set(funder_countries) | set(project_countries)))
+    overlap_percentage = calculate_overlap_percentage(
+        overlap_countries,
+        len(set(program_countries) | set(center_countries) | set(funder_countries) | set(project_countries))
+    )
     overlap_count = len(overlap_countries)
     overlap_label = "In All Four"
 
 elif len(selected_programs) > 0 and len(selected_centers) > 0 and len(selected_funders) > 0:
     overlap_countries = set(program_countries) & set(center_countries) & set(funder_countries)
-    overlap_percentage = calculate_overlap_percentage(overlap_countries, len(set(program_countries) | set(center_countries) | set(funder_countries)))
+    overlap_percentage = calculate_overlap_percentage(
+        overlap_countries,
+        len(set(program_countries) | set(center_countries) | set(funder_countries))
+    )
     overlap_count = len(overlap_countries)
     overlap_label = "In Programs, Centers and Funders"
 
 elif len(selected_programs) > 0 and len(selected_centers) > 0 and len(selected_projects) > 0:
     overlap_countries = set(program_countries) & set(center_countries) & set(project_countries)
-    overlap_percentage = calculate_overlap_percentage(overlap_countries, len(set(program_countries) | set(center_countries) | set(project_countries)))
+    overlap_percentage = calculate_overlap_percentage(
+        overlap_countries,
+        len(set(program_countries) | set(center_countries) | set(project_countries))
+    )
     overlap_count = len(overlap_countries)
     overlap_label = "In Programs, Centers and Projects"
 
 elif len(selected_programs) > 0 and len(selected_funders) > 0 and len(selected_projects) > 0:
     overlap_countries = set(program_countries) & set(funder_countries) & set(project_countries)
-    overlap_percentage = calculate_overlap_percentage(overlap_countries, len(set(program_countries) | set(funder_countries) | set(project_countries)))
+    overlap_percentage = calculate_overlap_percentage(
+        overlap_countries,
+        len(set(program_countries) | set(funder_countries) | set(project_countries))
+    )
     overlap_count = len(overlap_countries)
     overlap_label = "In Programs, Funders and Projects"
 
 elif len(selected_centers) > 0 and len(selected_funders) > 0 and len(selected_projects) > 0:
     overlap_countries = set(center_countries) & set(funder_countries) & set(project_countries)
-    overlap_percentage = calculate_overlap_percentage(overlap_countries, len(set(center_countries) | set(funder_countries) | set(project_countries)))
+    overlap_percentage = calculate_overlap_percentage(
+        overlap_countries,
+        len(set(center_countries) | set(funder_countries) | set(project_countries))
+    )
     overlap_count = len(overlap_countries)
     overlap_label = "In Centers, Funders and Projects"
 
 elif len(selected_programs) > 0 and len(selected_centers) > 0:
     overlap_countries = set(program_countries) & set(center_countries)
-    overlap_percentage = calculate_overlap_percentage(overlap_countries, len(set(program_countries) | set(center_countries)))
+    overlap_percentage = calculate_overlap_percentage(
+        overlap_countries,
+        len(set(program_countries) | set(center_countries))
+    )
     overlap_count = len(overlap_countries)
     overlap_label = "In Programs and Centers"
 
 elif len(selected_programs) > 0 and len(selected_funders) > 0:
     overlap_countries = set(program_countries) & set(funder_countries)
-    overlap_percentage = calculate_overlap_percentage(overlap_countries, len(set(program_countries) | set(funder_countries)))
+    overlap_percentage = calculate_overlap_percentage(
+        overlap_countries,
+        len(set(program_countries) | set(funder_countries))
+    )
     overlap_count = len(overlap_countries)
     overlap_label = "In Programs and Funders"
 
 elif len(selected_centers) > 0 and len(selected_projects) > 0:
     overlap_countries = set(center_countries) & set(project_countries)
-    overlap_percentage = calculate_overlap_percentage(overlap_countries, len(set(center_countries) | set(project_countries)))
+    overlap_percentage = calculate_overlap_percentage(
+        overlap_countries,
+        len(set(center_countries) | set(project_countries))
+    )
     overlap_count = len(overlap_countries)
     overlap_label = "In Centers and Projects"
 
 elif len(selected_centers) > 0 and len(selected_funders) > 0:
     overlap_countries = set(center_countries) & set(funder_countries)
-    overlap_percentage = calculate_overlap_percentage(overlap_countries, len(set(center_countries) | set(funder_countries)))
+    overlap_percentage = calculate_overlap_percentage(
+        overlap_countries,
+        len(set(center_countries) | set(funder_countries))
+    )
     overlap_count = len(overlap_countries)
     overlap_label = "In Centers and Funders"
 
 elif len(selected_funders) > 0 and len(selected_projects) > 0:
     overlap_countries = set(funder_countries) & set(project_countries)
-    overlap_percentage = calculate_overlap_percentage(overlap_countries, len(set(funder_countries) | set(project_countries)))
+    overlap_percentage = calculate_overlap_percentage(
+        overlap_countries,
+        len(set(funder_countries) | set(project_countries))
+    )
     overlap_count = len(overlap_countries)
     overlap_label = "In Funders and Projects"
 
 # New condition for two filters: Program and Project
 elif len(selected_programs) > 0 and len(selected_projects) > 0:
     overlap_countries = set(program_countries) & set(project_countries)
-    overlap_percentage = calculate_overlap_percentage(overlap_countries, len(set(program_countries) | set(project_countries)))
+    overlap_percentage = calculate_overlap_percentage(
+        overlap_countries,
+        len(set(program_countries) | set(project_countries))
+    )
     overlap_count = len(overlap_countries)
     overlap_label = "In Programs and Projects"
 
@@ -186,6 +216,19 @@ if visualization_df.empty:
         'Status': ['No data']
     })
 
+# Create a filter for "Status" in the main area (moved from sidebar)
+available_statuses = sorted(visualization_df['Status'].unique())
+st.subheader("Filter by Status")
+selected_statuses = st.multiselect(
+    "Select Status to Display",
+    available_statuses,
+    default=available_statuses
+)
+
+filtered_visualization_df = visualization_df[
+    visualization_df['Status'].isin(selected_statuses)
+] if selected_statuses else visualization_df
+
 # Visualize using an interactive Mapbox map
 color_map = {
     'In All Four': '#2ca02c',
@@ -203,7 +246,7 @@ color_map = {
 
 try:
     fig = px.choropleth_mapbox(
-        data_frame=visualization_df,
+        data_frame=filtered_visualization_df,
         geojson=geojson,
         locations='Country',
         featureidkey='properties.name',
