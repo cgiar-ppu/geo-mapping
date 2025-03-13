@@ -204,8 +204,14 @@ for country in all_selected_countries:
     country_status[country] = status
 
 # Create visualization dataframe
+country_name_mapping = {
+    "Côte d'Ivoire": "Ivory Coast",
+    # Add more mappings here if needed
+}
+
+# Create visualization dataframe
 visualization_df = pd.DataFrame([
-    {'Country': country, 'Status': status}
+    {'Country': country_name_mapping.get(country, country), 'Status': status}
     for country, status in country_status.items()
 ])
 
