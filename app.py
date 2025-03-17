@@ -206,6 +206,7 @@ for country in all_selected_countries:
 # Create visualization dataframe
 country_name_mapping = {
     "Côte d'Ivoire": "Ivory Coast",
+    "Syrian Arab Republic": "Syria",
     # Add more mappings here if needed
 }
 
