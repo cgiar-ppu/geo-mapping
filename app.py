@@ -205,9 +205,45 @@ for country in all_selected_countries:
 
 # Create visualization dataframe
 country_name_mapping = {
+    # Basic name differences
     "Côte d'Ivoire": "Ivory Coast",
     "Syrian Arab Republic": "Syria",
-    # Add more mappings here if needed
+    "Viet Nam": "Vietnam",
+    "Czechia": "Czech Republic",
+    "Eswatini": "Swaziland",
+    "Timor-Leste": "East Timor",
+    
+    # Remove "(the)" and similar parentheticals
+    "Dominican Republic (the)": "Dominican Republic",
+    "Sudan (the)": "Sudan",
+    "Bolivia (Plurinational State of)": "Bolivia",
+    "Iran (Islamic Republic of)": "Iran",
+    "Venezuela (Bolivarian Republic of)": "Venezuela",
+    
+    # Special cases with different naming conventions
+    "United Kingdom of Great Britain and Northern Ireland": "United Kingdom",
+    "Tanzania, United Republic": "United Republic of Tanzania",
+    "Tanzania": "United Republic of Tanzania",
+    "The Democratic Republic of the Congo": "Democratic Republic of the Congo",
+    "Lao People's Democratic Republic": "Laos",
+    "Palestine, State of": "Palestine",
+    "Taiwan (Province of China)": "Taiwan",
+    "Guinea-Bissau": "Guinea Bissau",
+    
+    # Korean peninsula specific mappings
+    "Korea": "South Korea",  # Assuming South Korea when just "Korea" is mentioned
+    "The Republic of Korea": "South Korea",
+    
+    # Small island nations and territories that might not be on the map
+    "St. Kitts and Nevis": "Saint Kitts and Nevis",
+    "St. Lucia": "Saint Lucia",
+    "St. Vincent and the Grenadines": "Saint Vincent and the Grenadines",
+    
+    # Special case for Cabo Verde
+    "Cabo Verde": "Cape Verde",
+    
+    # Note: Some entries like "Global" are not countries and won't appear on the map
+    # Note: Some territories like "American Samoa" might not be represented in the GeoJSON
 }
 
 # Create visualization dataframe
